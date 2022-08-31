@@ -1,5 +1,4 @@
 main:
-  params: [body]
   steps:
     - init:
         assign:
@@ -20,22 +19,13 @@ main:
               - checkJob:
                   call: http.get
                   args:
-                    url: "https://workflow-poc-btzeu5dosa-as.a.run.app"
+                    url: "https://workflow-poc-btzeu5dosa-as.a.run.app/boolean"
                     query:
-                      time: ${body.time}
+                      bool: ${table != "201203h"}
                   result: jobStatus
-              - checkIfDone:
-                  switch:
-                    - condition: ${jobStatus.body.complete}
-                      next: returnResult
-              - wait:
-                  call: sys.sleep
-                  args:
-                    seconds: 60
-                  next: checkJob
               - returnResult:
                   assign:
                     - results[table]: { }
-                    - results[table].complete: ${jobStatus.body.complete}
+                    - results[table].complete: ${jobStatus.body.bool}
     - returnResults:
         return: ${results}
