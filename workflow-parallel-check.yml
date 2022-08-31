@@ -28,14 +28,11 @@ main:
                     as: e
                     steps:
                       - setDefaultError:
-                          next: returnErrorResult
+                          assign:
+                            - jobStatus: { body: { bool:false } }
               - returnResult:
                   assign:
                     - results[table]: { }
                     - results[table].complete: ${jobStatus.body.bool}
-              - returnErrorResult:
-                  assign:
-                    - results[table]: { }
-                    - results[table].complete: false
     - returnResults:
         return: ${results}
