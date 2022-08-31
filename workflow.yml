@@ -1,0 +1,19 @@
+main:
+  params: [body]
+  steps:
+    - checkJob:
+        call: http.get
+        args:
+          url: "https://workflow-poc-btzeu5dosa-as.a.run.app"
+          query:
+            time: ${body.time}
+        result: jobStatus
+    - checkIfDone:
+        switch:
+          - condition: ${jobStatus.body.complete}
+            return: jobStatus
+    - wait:
+        call: sys.sleep
+        args:
+          seconds: 60
+        next: checkJob

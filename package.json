@@ -1,0 +1,13 @@
+{
+  "name": "workflow-poc",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./app.js"
+  },
+  "dependencies": {
+    "express": "~4.16.1",
+    "moment": "^2.29.4",
+    "morgan": "~1.9.1"
+  }
+}

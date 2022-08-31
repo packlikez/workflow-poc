@@ -1,0 +1,41 @@
+main:
+  steps:
+    - init:
+        assign:
+          - results: { } # result from each iteration keyed by table name
+          - tables:
+              - 201201h
+              - 201202h
+              - 201203h
+              - 201204h
+              - 201205h
+    - runQueries:
+        parallel:
+          shared: [ results ]
+          for:
+            value: table
+            in: ${tables}
+            steps:
+              - checkJob:
+                  try:
+                    call: http.get
+                    args:
+                      url: "https://workflow-poc-btzeu5dosa-as.a.run.app/boolean"
+                      query:
+                        bool: ${table != "201203h"}
+                    result: jobStatus
+                  except:
+                    as: e
+                    steps:
+                      - setDefaultError:
+                          next: returnErrorResult
+              - returnResult:
+                  assign:
+                    - results[table]: { }
+                    - results[table].complete: ${jobStatus.body.bool}
+              - returnErrorResult:
+                  assign:
+                    - results[table]: { }
+                    - results[table].complete: false
+    - returnResults:
+        return: ${results}
