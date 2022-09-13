@@ -21,7 +21,7 @@ main:
                   args:
                     url: "https://workflow-poc-btzeu5dosa-as.a.run.app/boolean"
                     query:
-                      bool: ${table != "201203h"}
+                      bool: true
                   result: jobStatus
               - returnResult:
                   assign:
